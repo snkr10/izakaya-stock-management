@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レポート - 居酒屋在庫管理システム</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>居酒屋在庫管理システム - レポート</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="stock.html">在庫管理</a></li>
+                <li><a href="procurement.html">仕入れ管理</a></li>
+                <li><a href="sales.html">販売管理</a></li>
+                <li><a href="report.html">レポート</a></li>
+                <li><a href="settings.html">設定</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>在庫レポート</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>カテゴリ</th>
+                        <th>在庫数</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-report-table">
+                    <!-- 在庫データがここに表示されます -->
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h2>売上レポート</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>月</th>
+                        <th>売上金額</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-report-table">
+                    <!-- 売上データがここに表示されます -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 居酒屋在庫管理システム</p>
+    </footer>
+    <script src="../js/scripts.js"></script>
+    <script>
+        // APIから在庫レポートを取得して表示
+        async function fetchStockReport() {
+            const response = await fetch('/api/report/stock');
+            const stocks = await response.json();
+            const tableBody = document.getElementById('stock-report-table');
+            tableBody.innerHTML = '';
+            stocks.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stock.productName}</td>
+                    <td>${stock.category}</td>
+                    <td>${stock.stock}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // APIから売上レポートを取得して表示
+        async function fetchSalesReport() {
+            const response = await fetch('/api/report/sales');
+            const sales = await response.json();
+            const tableBody = document.getElementById('sales-report-table');
+            tableBody.innerHTML = '';
+            sales.forEach(sale => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${new Date(sale.saleDate).getMonth() + 1}</td>
+                    <td>${sale.quantity * sale.productPrice}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ページロード時にレポートを取得
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStockReport();
+            fetchSalesReport();
+        });
+    </script>
+</body>
+</html>

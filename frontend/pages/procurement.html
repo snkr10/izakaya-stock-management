@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仕入れ管理 - 居酒屋在庫管理システム</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>居酒屋在庫管理システム - 仕入れ管理</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="stock.html">在庫管理</a></li>
+                <li><a href="procurement.html">仕入れ管理</a></li>
+                <li><a href="sales.html">販売管理</a></li>
+                <li><a href="report.html">レポート</a></li>
+                <li><a href="settings.html">設定</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>仕入れ一覧</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>仕入れ先名</th>
+                        <th>連絡先</th>
+                        <th>住所</th>
+                        <th>商品名</th>
+                        <th>数量</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="procurement-table-body">
+                    <!-- 仕入れデータがここに表示されます -->
+                </tbody>
+            </table>
+            <button onclick="addSupplier()">仕入れを追加</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 居酒屋在庫管理システム</p>
+    </footer>
+    <script src="../js/scripts.js"></script>
+    <script>
+        // APIから仕入れ一覧を取得して表示
+        async function fetchProcurements() {
+            const response = await fetch('/api/procurement');
+            const procurements = await response.json();
+            const tableBody = document.getElementById('procurement-table-body');
+            tableBody.innerHTML = '';
+            procurements.forEach(procurement => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${procurement.supplierName}</td>
+                    <td>${procurement.contact}</td>
+                    <td>${procurement.address}</td>
+                    <td>${procurement.productName}</td>
+                    <td>${procurement.quantity}</td>
+                    <td><button onclick="editProcurement('${procurement._id}')">編集</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ページロード時に仕入れ一覧を取得
+        document.addEventListener('DOMContentLoaded', fetchProcurements);
+    </script>
+</body>
+</html>

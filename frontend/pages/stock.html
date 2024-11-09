@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫管理 - 居酒屋在庫管理システム</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>居酒屋在庫管理システム - 在庫管理</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">ホーム</a></li>
+                <li><a href="stock.html">在庫管理</a></li>
+                <li><a href="procurement.html">仕入れ管理</a></li>
+                <li><a href="sales.html">販売管理</a></li>
+                <li><a href="report.html">レポート</a></li>
+                <li><a href="settings.html">設定</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>商品一覧</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品名</th>
+                        <th>カテゴリ</th>
+                        <th>在庫数</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-table-body">
+                    <!-- 商品データがここに表示されます -->
+                </tbody>
+            </table>
+            <button onclick="addProduct()">商品を追加</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 居酒屋在庫管理システム</p>
+    </footer>
+    <script src="../js/scripts.js"></script>
+    <script>
+        // APIから商品一覧を取得して表示
+        async function fetchStocks() {
+            const response = await fetch('/api/stock');
+            const stocks = await response.json();
+            const tableBody = document.getElementById('stock-table-body');
+            tableBody.innerHTML = '';
+            stocks.forEach(stock => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${stock.productName}</td>
+                    <td>${stock.category}</td>
+                    <td>${stock.stock}</td>
+                    <td><button onclick="editProduct('${stock._id}')">編集</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ページロード時に商品一覧を取得
+        document.addEventListener('DOMContentLoaded', fetchStocks);
+    </script>
+</body>
+</html>
