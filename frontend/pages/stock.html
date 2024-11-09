@@ -42,28 +42,6 @@
     <footer>
         <p>&copy; 2024 居酒屋在庫管理システム</p>
     </footer>
-    <script src="../js/scripts.js"></script>
-    <script>
-        // APIから商品一覧を取得して表示
-        async function fetchStocks() {
-            const response = await fetch('/api/stock');
-            const stocks = await response.json();
-            const tableBody = document.getElementById('stock-table-body');
-            tableBody.innerHTML = '';
-            stocks.forEach(stock => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${stock.productName}</td>
-                    <td>${stock.category}</td>
-                    <td>${stock.stock}</td>
-                    <td><button onclick="editProduct('${stock._id}')">編集</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // ページロード時に商品一覧を取得
-        document.addEventListener('DOMContentLoaded', fetchStocks);
-    </script>
+    <script src="../js/stock.js"></script>
 </body>
 </html>

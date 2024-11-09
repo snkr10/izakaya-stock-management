@@ -44,30 +44,6 @@
     <footer>
         <p>&copy; 2024 居酒屋在庫管理システム</p>
     </footer>
-    <script src="../js/scripts.js"></script>
-    <script>
-        // APIから仕入れ一覧を取得して表示
-        async function fetchProcurements() {
-            const response = await fetch('/api/procurement');
-            const procurements = await response.json();
-            const tableBody = document.getElementById('procurement-table-body');
-            tableBody.innerHTML = '';
-            procurements.forEach(procurement => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${procurement.supplierName}</td>
-                    <td>${procurement.contact}</td>
-                    <td>${procurement.address}</td>
-                    <td>${procurement.productName}</td>
-                    <td>${procurement.quantity}</td>
-                    <td><button onclick="editProcurement('${procurement._id}')">編集</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // ページロード時に仕入れ一覧を取得
-        document.addEventListener('DOMContentLoaded', fetchProcurements);
-    </script>
+    <script src="../js/procurement.js"></script>
 </body>
 </html>
